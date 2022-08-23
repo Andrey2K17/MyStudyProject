@@ -7,12 +7,17 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/agreementTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:padding="@dimen/padding_medium"
+        android:background="@color/gray"
+        android:drawablePadding="@dimen/padding_medium"
+        app:drawableTopCompat="@android:drawable/ic_dialog_alert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableTint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

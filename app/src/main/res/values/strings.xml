@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyStudyProject</string>
+
+    <string name="agrement">By clicking on the button blah3 blah1 blah2 terms of use
+     and privacy policy</string>
+    <string name="confidential">terms of use</string>
+    <string name="policy">privacy policy</string>
 </resources>

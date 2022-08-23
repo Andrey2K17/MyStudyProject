@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Учебный проект</string>
+
+    <string name="agrement">Нажимая на кнопку бла3 бла1 бла2 условия использования
+    и политикой конфиденцеальности</string>
+    <string name="confidential">условия использования</string>
+    <string name="policy">политикой конфиденцеальности</string>
+</resources>
