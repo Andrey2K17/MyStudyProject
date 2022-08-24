@@ -1,64 +1,66 @@
 package ru.pg13.mystudyproject
 
-import android.graphics.Color
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
-import ru.pg13.mystudyproject.lessons.lesson1.MyClickableSpan
+import ru.pg13.mystudyproject.lessons.lesson2.ImageCallback
+import ru.pg13.mystudyproject.lessons.lesson2.NetImage
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
+/*    атрибут adjustViewBounds очень часто используется чтобы картинка
+    заполняла все пространство.*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        lesson1()
+        lesson2Glide()
     }
 
-    private fun lesson1() {
-        val fullText = getString(R.string.agrement)
-        val confidential = getString(R.string.confidential)
-        val policy = getString(R.string.policy)
-        val spannableString = SpannableString(fullText)
+    private fun lesson2Old() {
+        val netImage = NetImage(URL, object : ImageCallback {
+            override fun success(bitmap: Bitmap) = runOnUiThread {
+                binding.agreementImageView.setImageBitmap(bitmap)
+            }
 
-        val confidentialClickable = MyClickableSpan() {
-            Snackbar.make(it, "Go to link1", Snackbar.LENGTH_SHORT).show()
-        }
+            override fun failed() = runOnUiThread {
+                Snackbar.make(binding.agreementImageView, "failed", Snackbar.LENGTH_SHORT).show()
+            }
+        })
 
-        val policyClickable = MyClickableSpan() {
-            Snackbar.make(it, "Go to link2", Snackbar.LENGTH_SHORT).show()
-        }
+        netImage.start()
+    }
 
-        spannableString.setSpan(
-            confidentialClickable,
-            fullText.indexOf(confidential),
-            fullText.indexOf(confidential) + confidential.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+    private fun lesson2Picasso() {
+        Picasso.get().load(URL).centerCrop()
+            .resize(720, 1280)
+            .placeholder(android.R.drawable.ic_media_pause)
+            .error(android.R.drawable.ic_dialog_alert)
+            .into(binding.agreementImageView)
+    }
 
-        spannableString.setSpan(
-            policyClickable,
-            fullText.indexOf(policy),
-            fullText.indexOf(policy) + policy.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+    private fun lesson2Glide() {
+        Glide
+            .with(this)
+            .load(URL)
+            //.centerCrop()
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(android.R.drawable.ic_media_pause)
+            .into(binding.agreementImageView)
+    }
 
-        binding.agreementTextView.run {
-            text = spannableString
-            movementMethod = LinkMovementMethod.getInstance()
-            highlightColor = Color.TRANSPARENT
-        }
-
+    private companion object {
+        const val URL =
+            "https://www.sport.ru/ai/files/tags_attrs/r1251/26b0a5bcf0e9.jpg"
     }
 }
