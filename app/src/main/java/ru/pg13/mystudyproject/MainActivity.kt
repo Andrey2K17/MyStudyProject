@@ -1,66 +1,107 @@
 package ru.pg13.mystudyproject
 
-import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Patterns.EMAIL_ADDRESS
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
+import com.google.android.material.textfield.TextInputEditText
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
-import ru.pg13.mystudyproject.lessons.lesson2.ImageCallback
-import ru.pg13.mystudyproject.lessons.lesson2.NetImage
+import ru.pg13.mystudyproject.lessons.lesson3.SimpleTextWatcher
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-
-/*    атрибут adjustViewBounds очень часто используется чтобы картинка
-    заполняла все пространство.*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        lesson2Glide()
+        lesson3Button()
+        binding.root.setOnClickListener {
+            hideKeyboard(it)
+        }
+        binding.textInputEditText.addTextChangedListener(textWatcher)
+        binding.textInputEditText.listenChanges { binding.textInputLayout.isErrorEnabled = false }
     }
 
-    private fun lesson2Old() {
-        val netImage = NetImage(URL, object : ImageCallback {
-            override fun success(bitmap: Bitmap) = runOnUiThread {
-                binding.agreementImageView.setImageBitmap(bitmap)
-            }
-
-            override fun failed() = runOnUiThread {
-                Snackbar.make(binding.agreementImageView, "failed", Snackbar.LENGTH_SHORT).show()
+    private fun lesson3WithValidation() {
+        //Здесь существует проблема с лишним вызовом метода проверки после подстановки преффикса
+        binding.textInputEditText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(p0: Editable?) {
+                val input = p0.toString()
+                if (input.endsWith("@g")) {
+                    val fulMail = "${input}mail.com"
+                    //при таком способе картека вернется в начало строки
+                    //binding.textInputEditText.setText(fulMail)
+                    binding.textInputEditText.setTextCorrectly(fulMail)
+                }
+                val valid = android.util.Patterns.EMAIL_ADDRESS.matcher(p0.toString()).matches()
+                binding.textInputLayout.isErrorEnabled = !valid
+                val error = if (valid) "" else getString(R.string.invalid_email_message)
+                binding.textInputLayout.error = error
+                if (valid) Toast.makeText(
+                    this@MainActivity,
+                    R.string.valida_email_message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
-
-        netImage.start()
     }
 
-    private fun lesson2Picasso() {
-        Picasso.get().load(URL).centerCrop()
-            .resize(720, 1280)
-            .placeholder(android.R.drawable.ic_media_pause)
-            .error(android.R.drawable.ic_dialog_alert)
-            .into(binding.agreementImageView)
+    private fun lesson3Button() {
+        binding.loginButton.setOnClickListener {
+            if(EMAIL_ADDRESS.matcher(binding.textInputEditText.text.toString()).matches()) {
+                hideKeyboard(binding.textInputEditText)
+                binding.loginButton.isEnabled = false
+                Snackbar.make(binding.loginButton, "Go to post login", Snackbar.LENGTH_SHORT).show()
+            } else {
+                binding.textInputLayout.isErrorEnabled = true
+                binding.textInputLayout.error = getString(R.string.invalid_email_message)
+            }
+        }
     }
 
-    private fun lesson2Glide() {
-        Glide
-            .with(this)
-            .load(URL)
-            //.centerCrop()
-            .apply(RequestOptions.circleCropTransform())
-            .placeholder(android.R.drawable.ic_media_pause)
-            .into(binding.agreementImageView)
+    private val textWatcher: TextWatcher = object :SimpleTextWatcher() {
+        override fun afterTextChanged(p0: Editable?) {
+            val input = p0.toString()
+            if (input.endsWith("@g")) {
+                val fulMail = "${input}mail.com"
+                //при таком способе картека вернется в начало строки
+                //binding.textInputEditText.setText(fulMail)
+                setText(fulMail)
+            }
+        }
     }
 
-    private companion object {
-        const val URL =
-            "https://www.sport.ru/ai/files/tags_attrs/r1251/26b0a5bcf0e9.jpg"
+    private fun setText(text: String) {
+        binding.textInputEditText.removeTextChangedListener(textWatcher)
+        binding.textInputEditText.setTextCorrectly(text)
+        binding.textInputEditText.addTextChangedListener(textWatcher)
     }
+}
+
+//изящное решение для textWatcher в случае если вы не ставите програмно текст.
+fun TextInputEditText.listenChanges(block: (text: String) -> Unit) {
+    addTextChangedListener(object : SimpleTextWatcher() {
+        override fun afterTextChanged(p0: Editable?) {
+            block.invoke(p0.toString())
+        }
+    })
+}
+
+fun TextInputEditText.setTextCorrectly(text: CharSequence) {
+    setText(text)
+    setSelection(text.length)
+}
+
+fun AppCompatActivity.hideKeyboard(view: View) {
+    val imm = this.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
 }

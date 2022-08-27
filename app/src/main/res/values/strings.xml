@@ -5,4 +5,8 @@
      and privacy policy</string>
     <string name="confidential">terms of use</string>
     <string name="policy">privacy policy</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="invalid_email_message">Некорректная почта</string>
+    <string name="valida_email_message">Корректная почта</string>
 </resources>
