@@ -1,16 +1,21 @@
 package ru.pg13.mystudyproject
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
+import android.text.SpannableString
 import android.text.TextWatcher
 import android.util.Patterns.EMAIL_ADDRESS
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
+import ru.pg13.mystudyproject.databinding.DialogBinding
 import ru.pg13.mystudyproject.lessons.lesson3.SimpleTextWatcher
 
 class MainActivity : AppCompatActivity() {
@@ -23,12 +28,24 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        lesson4Checkbox()
         lesson3Button()
         binding.root.setOnClickListener {
             hideKeyboard(it)
         }
         binding.textInputEditText.addTextChangedListener(textWatcher)
         binding.textInputEditText.listenChanges { binding.textInputLayout.isErrorEnabled = false }
+    }
+
+    private fun lesson4Checkbox() {
+        //Первая лекция
+        val spannableString = SpannableString(getString(R.string.agreement_full_text))
+        binding.checkBox.text = spannableString
+
+        binding.loginButton.isEnabled = false
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            binding.loginButton.isEnabled = isChecked
+        }
     }
 
     private fun lesson3WithValidation() {
@@ -59,8 +76,19 @@ class MainActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             if(EMAIL_ADDRESS.matcher(binding.textInputEditText.text.toString()).matches()) {
                 hideKeyboard(binding.textInputEditText)
-                binding.loginButton.isEnabled = false
+                binding.contentLayout.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
                 Snackbar.make(binding.loginButton, "Go to post login", Snackbar.LENGTH_SHORT).show()
+                Handler(Looper.myLooper()!!).postDelayed({
+                    binding.contentLayout.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    val dialog = BottomSheetDialog(this)
+                    val view = DialogBinding.inflate(layoutInflater)
+                    dialog.setCancelable(false)
+                    view.closeButton.setOnClickListener { dialog.dismiss() }
+                    dialog.setContentView(view.root)
+                    dialog.show()
+                }, 3000)
             } else {
                 binding.textInputLayout.isErrorEnabled = true
                 binding.textInputLayout.error = getString(R.string.invalid_email_message)

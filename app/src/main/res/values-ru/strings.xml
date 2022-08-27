@@ -10,4 +10,7 @@
     <string name="password">Пароль</string>
     <string name="invalid_email_message">Некорректная почта</string>
     <string name="valida_email_message">Корректная почта</string>
+    <string name="agreement_full_text">"Я согласен с условиями использования и политикой конфиденциальности"</string>
+    <string name="service_is_unavailable">Сервис временно недоступен</string>
+    <string name="attention">Внимание</string>
 </resources>
