@@ -2,28 +2,26 @@ package ru.pg13.mystudyproject
 
 import android.app.Dialog
 import android.content.ContentValues.TAG
-import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
 import ru.pg13.mystudyproject.databinding.DialogBinding
 import ru.pg13.mystudyproject.lessons.lesson3.SimpleTextWatcher
-import ru.pg13.mystudyproject.lessons.lesson5.*
+import ru.pg13.mystudyproject.lessons.lesson5.TextCallback
+import ru.pg13.mystudyproject.lessons.lesson5.TextObservable
+import ru.pg13.mystudyproject.lessons.lesson5.ViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,14 +60,6 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState?.let {
             state = it.getInt("screenState", 123)
         }
-
-        val weatherStation = WeatherStation()
-        weatherStation.addMan(Man("Фил", "Джексон"))
-        weatherStation.addMan(Man("Иван", "Иванов"))
-        weatherStation.addMan(Man("Григорий", "Голубев"))
-        weatherStation.addMan(Man("Павел", "Ивлев"))
-
-        weatherStation.updateWeather()
 
         Log.d(TAG, "State: $state")
 
@@ -180,19 +170,20 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause")
+        viewModel.pauseCounting()
         binding.textInputEditText.removeTextChangedListener(textWatcher)
     }
 
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume")
-        binding.textInputEditText.addTextChangedListener(textWatcher)
+        viewModel.resumeCounting()
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
-        viewModel.clear()
         super.onDestroy()
+        viewModel.clear()
     }
 }
 
