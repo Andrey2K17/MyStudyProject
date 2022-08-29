@@ -23,9 +23,7 @@ import com.google.android.material.textfield.TextInputEditText
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
 import ru.pg13.mystudyproject.databinding.DialogBinding
 import ru.pg13.mystudyproject.lessons.lesson3.SimpleTextWatcher
-import ru.pg13.mystudyproject.lessons.lesson5.TextCallback
-import ru.pg13.mystudyproject.lessons.lesson5.TextObservable
-import ru.pg13.mystudyproject.lessons.lesson5.ViewModel
+import ru.pg13.mystudyproject.lessons.lesson5.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,6 +62,14 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState?.let {
             state = it.getInt("screenState", 123)
         }
+
+        val weatherStation = WeatherStation()
+        weatherStation.addMan(Man("Фил", "Джексон"))
+        weatherStation.addMan(Man("Иван", "Иванов"))
+        weatherStation.addMan(Man("Григорий", "Голубев"))
+        weatherStation.addMan(Man("Павел", "Ивлев"))
+
+        weatherStation.updateWeather()
 
         Log.d(TAG, "State: $state")
 
