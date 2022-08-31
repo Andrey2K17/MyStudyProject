@@ -13,4 +13,6 @@
     <string name="agreement_full_text">"Я согласен с условиями использования и политикой конфиденциальности"</string>
     <string name="service_is_unavailable">Сервис временно недоступен</string>
     <string name="attention">Внимание</string>
+    <string name="get_joke">Получить шутку</string>
+    <string name="no_connection">Отсутствует интернет соединение</string>
 </resources>
