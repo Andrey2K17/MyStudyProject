@@ -1,10 +1,13 @@
 package ru.pg13.mystudyproject.lessons.lesson8.interfaces
 
+import retrofit2.Call
+import retrofit2.http.GET
 import ru.pg13.mystudyproject.lessons.lesson8.models.JokeDTO
 
 interface JokeService {
 
-    fun getJoke(callback: ServiceCallback)
+    @GET("http://api.icndb.com/jokes/random/")
+    fun getJoke(): Call<JokeDTO>
 }
 
 interface ServiceCallback {
