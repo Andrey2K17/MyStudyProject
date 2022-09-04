@@ -1,21 +1,33 @@
 package ru.pg13.mystudyproject.lessons.lesson8
 
+import androidx.annotation.DrawableRes
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.Model
-import ru.pg13.mystudyproject.lessons.lesson8.interfaces.ResultCallback
-import ru.pg13.mystudyproject.lessons.lesson8.models.JokeFailure
-import ru.pg13.mystudyproject.lessons.lesson8.models.Joke
+import ru.pg13.mystudyproject.lessons.lesson8.interfaces.JokeCallback
+import ru.pg13.mystudyproject.lessons.lesson9.Joke
 
 class ViewModel(private val model: Model) {
 
-    private var callback: TextCallback? = null
+    private var dataCallback: DataCallback? = null
 
-    fun init(callback: TextCallback) {
-        this.callback = callback
-        model.init(object : ResultCallback {
-            override fun provideSuccess(data: Joke) = callback.provideText(data.getJokeUi())
+    fun init(callback: DataCallback) {
+        this.dataCallback = callback
+        model.init(object : JokeCallback {
+            override fun provide(joke: Joke) {
+                dataCallback?.let {
+                    joke.map(it)
+                }
+            }
 
-            override fun provideError(error: JokeFailure) = callback.provideText(error.getMessage())
         })
+    }
+
+    private val jokeCallback = object : JokeCallback {
+        override fun provide(data: Joke) {
+            dataCallback?.let {
+                data.map(it)
+            }
+        }
+
     }
 
     fun getJoke() {
@@ -23,12 +35,22 @@ class ViewModel(private val model: Model) {
     }
 
     fun clear() {
-        callback = null
+        dataCallback = null
         model.clear()
+    }
+
+    fun chooseFavorites(favorites: Boolean) {
+        model.chooseDataSource(favorites)
+    }
+
+    fun changeJokeStatus() {
+        model.changeJokeStatus(jokeCallback = jokeCallback)
     }
 }
 
-interface TextCallback {
+interface DataCallback {
 
     fun provideText(text: String)
+
+    fun provideIconRes(@DrawableRes id: Int)
 }

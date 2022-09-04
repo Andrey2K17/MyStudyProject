@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/repositories/my_study_project/app/src/main/res/layout/activity_main.xml" value="0.13796296296296295" />
+        <entry key="..\:/repositories/my_study_project/app/src/main/res/drawable/baseline_favorite_24.xml" value="0.1" />
+        <entry key="..\:/repositories/my_study_project/app/src/main/res/drawable/baseline_favorite_border_24.xml" value="0.1" />
+        <entry key="..\:/repositories/my_study_project/app/src/main/res/layout/activity_main.xml" value="0.67" />
         <entry key="..\:/repositories/my_study_project/app/src/main/res/layout/dialog.xml" value="0.1" />
         <entry key="..\:/repositories/my_study_project/app/src/main/res/xml/network_security_config.xml" value="0.1421875" />
       </map>

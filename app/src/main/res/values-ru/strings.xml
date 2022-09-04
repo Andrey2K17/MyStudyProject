@@ -15,4 +15,6 @@
     <string name="attention">Внимание</string>
     <string name="get_joke">Получить шутку</string>
     <string name="no_connection">Отсутствует интернет соединение</string>
+    <string name="show_favorite_joke">Показать любимые шутки</string>
+    <string name="no_cached_jokes">Нет любимых шуток! Нажмите на сердц, чтобы добавить</string>
 </resources>

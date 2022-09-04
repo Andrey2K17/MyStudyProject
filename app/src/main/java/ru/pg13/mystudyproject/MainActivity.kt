@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
-import ru.pg13.mystudyproject.lessons.lesson8.TextCallback
+import ru.pg13.mystudyproject.lessons.lesson8.DataCallback
 import ru.pg13.mystudyproject.lessons.lesson8.ViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +20,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         viewModel = (application as MyApplication).viewModel
 
+
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.chooseFavorites(isChecked)
+        }
+
+        binding.changeButton.setOnClickListener {
+            viewModel.changeJokeStatus()
+        }
+
         binding.progressBar.visibility = View.INVISIBLE
 
         binding.actionButton.setOnClickListener {
@@ -28,11 +37,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.getJoke()
         }
 
-        viewModel.init(object : TextCallback {
+        viewModel.init(object : DataCallback {
             override fun provideText(text: String) = runOnUiThread {
                 binding.actionButton.isEnabled = true
                 binding.progressBar.visibility = View.INVISIBLE
                 binding.textView.text = text
+            }
+
+            override fun provideIconRes(id: Int) = runOnUiThread {
+                binding.changeButton.setImageResource(id)
             }
         })
     }
