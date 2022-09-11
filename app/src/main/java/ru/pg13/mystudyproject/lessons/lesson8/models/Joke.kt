@@ -24,5 +24,5 @@ data class Joke(
         }
     }
 
-    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(value.id, this)
+    suspend fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(value.id, this)
 }

@@ -1,14 +1,11 @@
 package ru.pg13.mystudyproject.lessons.lesson9
 
+import ru.pg13.mystudyproject.lessons.lesson11.Result
 import ru.pg13.mystudyproject.lessons.lesson8.models.Joke
+import ru.pg13.mystudyproject.lessons.lesson8.models.JokeServerModel
 
 interface CloudDataSource {
-    fun getJoke(callback: JokeCloudCallback)
-}
-
-interface JokeCloudCallback {
-    fun provide(joke: Joke)
-    fun fail(error: ErrorType)
+    suspend fun getJoke(): Result<JokeServerModel, ErrorType>
 }
 
 enum class ErrorType {

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.init(object : DataCallback {
-            override fun provideText(text: String) = runOnUiThread {
+            override fun provideText(text: String) {
                 binding.actionButton.isEnabled = true
                 binding.progressBar.visibility = View.INVISIBLE
                 binding.textView.text = text

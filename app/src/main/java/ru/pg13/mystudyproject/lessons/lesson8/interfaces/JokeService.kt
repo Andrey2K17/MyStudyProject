@@ -6,20 +6,11 @@ import ru.pg13.mystudyproject.lessons.lesson8.models.JokeServerModel
 
 interface JokeService {
 
+//    @GET("http://api.icndb.com/jokes/random/")
+//    suspend fun getJoke(): JokeServerModel
+
     @GET("http://api.icndb.com/jokes/random/")
     fun getJoke(): Call<JokeServerModel>
-}
-
-interface ServiceCallback {
-
-    fun returnSuccess(data: JokeServerModel)
-
-    fun returnError(type: ErrorType)
-}
-
-enum class ErrorType {
-    NO_CONNECTION,
-    OTHER
 }
 
 
