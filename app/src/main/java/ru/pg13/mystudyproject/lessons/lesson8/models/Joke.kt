@@ -1,8 +1,10 @@
 package ru.pg13.mystudyproject.lessons.lesson8.models
 
 import com.google.gson.annotations.SerializedName
+import ru.pg13.mystudyproject.lessons.lesson12.ChangeJoke
 import ru.pg13.mystudyproject.lessons.lesson9.BaseJokeUiModel
 import ru.pg13.mystudyproject.lessons.lesson9.CacheDataSource
+import ru.pg13.mystudyproject.lessons.lesson9.ChangeJokeStatus
 import ru.pg13.mystudyproject.lessons.lesson9.DB.JokeRealm
 import ru.pg13.mystudyproject.lessons.lesson9.FavoriteJokeUiModel
 
@@ -11,7 +13,7 @@ data class Joke(
     private val type: String,
     @SerializedName("value")
     private val value: Value,
-) {
+): ChangeJoke {
     fun toBaseJoke() = BaseJokeUiModel(value.joke)
 
     fun toFavoriteJoke() = FavoriteJokeUiModel(value.joke)
@@ -24,5 +26,6 @@ data class Joke(
         }
     }
 
-    suspend fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(value.id, this)
+    override suspend fun change(cacheDataSource: ChangeJokeStatus) =
+        cacheDataSource.addOrRemove(value.id, this)
 }

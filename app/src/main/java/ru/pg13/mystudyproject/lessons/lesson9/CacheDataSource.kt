@@ -1,12 +1,10 @@
 package ru.pg13.mystudyproject.lessons.lesson9
 
-import ru.pg13.mystudyproject.lessons.lesson11.Result
+import ru.pg13.mystudyproject.lessons.lesson12.JokeDataFetcher
 import ru.pg13.mystudyproject.lessons.lesson8.models.Joke
-import ru.pg13.mystudyproject.lessons.lesson8.models.JokeServerModel
 
-interface CacheDataSource {
+interface CacheDataSource : JokeDataFetcher<Joke, Unit>, ChangeJokeStatus
 
+interface ChangeJokeStatus {
     suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel
-
-    suspend fun getJoke() : Result<Joke, Unit>
 }

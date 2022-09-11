@@ -22,9 +22,6 @@ class BaseCachedDataSource(private val realmProvider: RealmProvider) : CacheData
                     it.executeTransaction {
                         jokeRealm.deleteFromRealm()
                     }
-//                it.executeTransactionAsync {
-//                    jokeRealm.deleteFromRealm()
-//                }
                     joke.toBaseJoke()
                 }
     }
