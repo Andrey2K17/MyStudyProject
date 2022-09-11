@@ -2,9 +2,9 @@ package ru.pg13.mystudyproject.lessons.lesson8.models
 
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.Model
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.JokeCallback
-import ru.pg13.mystudyproject.lessons.lesson9.BaseJoke
-import ru.pg13.mystudyproject.lessons.lesson9.FailedJoke
-import ru.pg13.mystudyproject.lessons.lesson9.FavoriteJoke
+import ru.pg13.mystudyproject.lessons.lesson9.BaseJokeUiModel
+import ru.pg13.mystudyproject.lessons.lesson9.FailedJokeUiModel
+import ru.pg13.mystudyproject.lessons.lesson9.FavoriteJokeUiModel
 
 class TestModel(resourceManager: ResourceManager): Model {
 
@@ -17,9 +17,9 @@ class TestModel(resourceManager: ResourceManager): Model {
         Thread {
             Thread.sleep(1000)
             when(count) {
-                0 -> callback?.provide(BaseJoke("testText"))
-                1 -> callback?.provide(FavoriteJoke("favoriteJokeText"))
-                2 -> callback?.provide(FailedJoke(serviceUnavailable.getMessage()))
+                0 -> callback?.provide(BaseJokeUiModel("testText"))
+                1 -> callback?.provide(FavoriteJokeUiModel("favoriteJokeText"))
+                2 -> callback?.provide(FailedJokeUiModel(serviceUnavailable.getMessage()))
             }
             count++
             if (count == 3) count = 0

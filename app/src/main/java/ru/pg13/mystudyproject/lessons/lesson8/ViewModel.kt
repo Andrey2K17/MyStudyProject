@@ -3,7 +3,7 @@ package ru.pg13.mystudyproject.lessons.lesson8
 import androidx.annotation.DrawableRes
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.Model
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.JokeCallback
-import ru.pg13.mystudyproject.lessons.lesson9.Joke
+import ru.pg13.mystudyproject.lessons.lesson9.JokeUiModel
 
 class ViewModel(private val model: Model) {
 
@@ -12,7 +12,7 @@ class ViewModel(private val model: Model) {
     fun init(callback: DataCallback) {
         this.dataCallback = callback
         model.init(object : JokeCallback {
-            override fun provide(joke: Joke) {
+            override fun provide(joke: JokeUiModel) {
                 dataCallback?.let {
                     joke.map(it)
                 }
@@ -22,7 +22,7 @@ class ViewModel(private val model: Model) {
     }
 
     private val jokeCallback = object : JokeCallback {
-        override fun provide(data: Joke) {
+        override fun provide(data: JokeUiModel) {
             dataCallback?.let {
                 data.map(it)
             }
