@@ -52,8 +52,8 @@ class ViewModel(
 
         data class Initial(val text: String, @DrawableRes val id: Int) : State() {
             override fun show(progress: ShowView, button: EnableView) {
-                progress.show(true)
-                button.enable(false)
+                progress.show(false)
+                button.enable(true)
             }
             override fun show(textView: ShowText, imageButton: ShowImage) {
                 textView.show(text)

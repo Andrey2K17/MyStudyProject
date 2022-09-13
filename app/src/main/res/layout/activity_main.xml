@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ru.pg13.mystudyproject.lessons.lesson13.custom.CorrectTextView
+        <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -26,24 +26,23 @@
             android:gravity="center"
             tools:text="Joke error message" />
 
-        <ru.pg13.mystudyproject.lessons.lesson13.custom.CorrectImageButton
+        <ImageButton
             android:id="@+id/changeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:background="?selectableItemBackground"
             android:layout_gravity="center_vertical"
             tools:src="@drawable/baseline_favorite_border_24" />
     </LinearLayout>
 
-    <ru.pg13.mystudyproject.lessons.lesson13.custom.CorrectProgress
+    <ProgressBar
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
-    <ru.pg13.mystudyproject.lessons.lesson13.custom.CorrectButton
+    <Button
         android:id="@+id/actionButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
