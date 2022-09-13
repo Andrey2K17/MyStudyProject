@@ -8,6 +8,7 @@ import ru.pg13.mystudyproject.lessons.lesson11.BaseRealmProvider
 import ru.pg13.mystudyproject.lessons.lesson12.BaseCachedJoke
 import ru.pg13.mystudyproject.lessons.lesson12.CacheResultHandler
 import ru.pg13.mystudyproject.lessons.lesson12.CloudResultHandler
+import ru.pg13.mystudyproject.lessons.lesson13.BaseCommunication
 import ru.pg13.mystudyproject.lessons.lesson8.BaseModel
 import ru.pg13.mystudyproject.lessons.lesson8.ViewModel
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.JokeService
@@ -47,7 +48,8 @@ class MyApplication : Application() {
                     ServiceUnavailable(resourceManager)
                 ),
                 cachedJoke
-            )
+            ),
+            BaseCommunication()
         )
     }
 }

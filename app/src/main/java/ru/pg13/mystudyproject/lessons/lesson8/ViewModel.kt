@@ -1,28 +1,26 @@
 package ru.pg13.mystudyproject.lessons.lesson8
 
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.pg13.mystudyproject.lessons.lesson13.Communication
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.Model
 
-class ViewModel(private val model: Model): ViewModel() {
-
-    private var dataCallback: DataCallback? = null
-
-    fun init(callback: DataCallback) {
-        this.dataCallback = callback
-    }
+class ViewModel(
+    private val model: Model,
+    private val communication: Communication
+) : ViewModel() {
 
     fun getJoke() = viewModelScope.launch {
-        val uiModel = model.getJoke()
-        dataCallback?.let {
-            uiModel.map(it)
-        }
-    }
-
-    fun clear() {
-        dataCallback = null
+        communication.showState(State.Progress)
+        model.getJoke().show(communication)
     }
 
     fun chooseFavorites(favorites: Boolean) {
@@ -30,16 +28,43 @@ class ViewModel(private val model: Model): ViewModel() {
     }
 
     fun changeJokeStatus() = viewModelScope.launch {
-        val uiModel = model.changeJokeStatus()
-        dataCallback?.let {
-            uiModel?.map(it)
+        model.changeJokeStatus()?.show(communication)
+    }
+
+    fun observe(owner: LifecycleOwner, observer: Observer<State>) =
+        communication.observer(owner, observer)
+
+    sealed class State {
+        abstract fun show(
+            progress: View,
+            button: Button,
+            textView: TextView,
+            imageButton: ImageButton
+        )
+        object Progress : State() {
+            override fun show(
+                progress: View,
+                button: Button,
+                textView: TextView,
+                imageButton: ImageButton
+            ) {
+                progress.visibility = View.VISIBLE
+                button.isEnabled = false
+            }
+        }
+
+        data class Initial(val text: String, @DrawableRes val id: Int) : State() {
+            override fun show(
+                progress: View,
+                button: Button,
+                textView: TextView,
+                imageButton: ImageButton
+            ) {
+                progress.visibility = View.INVISIBLE
+                button.isEnabled = true
+                textView.text = text
+                imageButton.setImageResource(id)
+            }
         }
     }
-}
-
-interface DataCallback {
-
-    fun provideText(text: String)
-
-    fun provideIconRes(@DrawableRes id: Int)
 }

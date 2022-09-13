@@ -2,9 +2,9 @@ package ru.pg13.mystudyproject
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
-import ru.pg13.mystudyproject.lessons.lesson8.DataCallback
 import ru.pg13.mystudyproject.lessons.lesson8.ViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -32,27 +32,12 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.INVISIBLE
 
         binding.actionButton.setOnClickListener {
-            binding.actionButton.isEnabled = false
-            binding.progressBar.visibility = View.VISIBLE
             viewModel.getJoke()
         }
 
-        viewModel.init(object : DataCallback {
-            override fun provideText(text: String) {
-                binding.actionButton.isEnabled = true
-                binding.progressBar.visibility = View.INVISIBLE
-                binding.textView.text = text
-            }
-
-            override fun provideIconRes(id: Int) = runOnUiThread {
-                binding.changeButton.setImageResource(id)
-            }
-        })
-    }
-
-    override fun onDestroy() {
-        viewModel.clear()
-        super.onDestroy()
+        viewModel.observe(this) { state ->
+            state.show(binding.progressBar, binding.actionButton, binding.textView, binding.changeButton)
+        }
     }
 }
 
