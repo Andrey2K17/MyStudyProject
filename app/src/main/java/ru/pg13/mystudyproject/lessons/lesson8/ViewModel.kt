@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.pg13.mystudyproject.lessons.lesson13.Communication
+import ru.pg13.mystudyproject.lessons.lesson13.*
 import ru.pg13.mystudyproject.lessons.lesson8.interfaces.Model
 
 class ViewModel(
@@ -35,35 +35,29 @@ class ViewModel(
         communication.observer(owner, observer)
 
     sealed class State {
-        abstract fun show(
-            progress: View,
-            button: Button,
-            textView: TextView,
-            imageButton: ImageButton
-        )
+        fun show(progress: ShowView, button: EnableView, textView: ShowText, imageButton: ShowImage) {
+            show(progress, button)
+            show(textView, imageButton)
+        }
+
+        protected open fun show(progress: ShowView, button: EnableView) {}
+        protected open fun show(textView: ShowText, imageButton: ShowImage) {}
+
         object Progress : State() {
-            override fun show(
-                progress: View,
-                button: Button,
-                textView: TextView,
-                imageButton: ImageButton
-            ) {
-                progress.visibility = View.VISIBLE
-                button.isEnabled = false
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(true)
+                button.enable(false)
             }
         }
 
         data class Initial(val text: String, @DrawableRes val id: Int) : State() {
-            override fun show(
-                progress: View,
-                button: Button,
-                textView: TextView,
-                imageButton: ImageButton
-            ) {
-                progress.visibility = View.INVISIBLE
-                button.isEnabled = true
-                textView.text = text
-                imageButton.setImageResource(id)
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(true)
+                button.enable(false)
+            }
+            override fun show(textView: ShowText, imageButton: ShowImage) {
+                textView.show(text)
+                imageButton.show(id)
             }
         }
     }
