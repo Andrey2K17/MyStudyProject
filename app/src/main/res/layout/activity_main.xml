@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <ru.pg13.mystudyproject.views.CorrectTextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -26,23 +26,24 @@
             android:gravity="center"
             tools:text="Joke error message" />
 
-        <ImageButton
+        <ru.pg13.mystudyproject.views.CorrectImageButton
             android:id="@+id/changeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_gravity="center_vertical"
             tools:src="@drawable/baseline_favorite_border_24" />
     </LinearLayout>
 
-    <ProgressBar
+    <ru.pg13.mystudyproject.views.CorrectProgress
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
-    <Button
+    <ru.pg13.mystudyproject.views.CorrectButton
         android:id="@+id/actionButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"

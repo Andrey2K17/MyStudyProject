@@ -4,24 +4,22 @@ import android.app.Application
 import io.realm.Realm
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.pg13.mystudyproject.lessons.lesson11.BaseRealmProvider
-import ru.pg13.mystudyproject.lessons.lesson12.BaseCachedJoke
-import ru.pg13.mystudyproject.lessons.lesson12.CacheResultHandler
-import ru.pg13.mystudyproject.lessons.lesson12.CloudResultHandler
-import ru.pg13.mystudyproject.lessons.lesson13.BaseCommunication
-import ru.pg13.mystudyproject.lessons.lesson8.BaseModel
-import ru.pg13.mystudyproject.lessons.lesson8.ViewModel
-import ru.pg13.mystudyproject.lessons.lesson8.interfaces.JokeService
-import ru.pg13.mystudyproject.lessons.lesson8.models.BaseResourceManager
-import ru.pg13.mystudyproject.lessons.lesson8.models.NoCachedJokes
-import ru.pg13.mystudyproject.lessons.lesson8.models.NoConnection
-import ru.pg13.mystudyproject.lessons.lesson8.models.ServiceUnavailable
-import ru.pg13.mystudyproject.lessons.lesson9.BaseCloudDataSource
-import ru.pg13.mystudyproject.lessons.lesson9.DB.BaseCachedDataSource
+import ru.pg13.mystudyproject.data.BaseCachedDataSource
+import ru.pg13.mystudyproject.data.BaseCloudDataSource
+import ru.pg13.mystudyproject.data.BaseRealmProvider
+import ru.pg13.mystudyproject.data.interfaces.JokeService
+import ru.pg13.mystudyproject.domain.BaseJokeInteractor
+import ru.pg13.mystudyproject.domain.JokeFailureFactory
+import ru.pg13.mystudyproject.domain.JokeRealmMapper
+import ru.pg13.mystudyproject.domain.JokeSuccessMapper
+import ru.pg13.mystudyproject.data.BaseCachedJoke
+import ru.pg13.mystudyproject.domain.BaseCommunication
+import ru.pg13.mystudyproject.domain.BaseViewModel
+import ru.pg13.mystudyproject.data.BaseJokeRepository
 
 class MyApplication : Application() {
 
-    lateinit var viewModel: ViewModel
+    lateinit var viewModel: BaseViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -30,26 +28,12 @@ class MyApplication : Application() {
             .baseUrl("https://www.google.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val cachedJoke = BaseCachedJoke()
-        val cacheDataSource = BaseCachedDataSource(BaseRealmProvider())
+
+        val cacheDataSource = BaseCachedDataSource(BaseRealmProvider(), JokeRealmMapper())
         val resourceManager = BaseResourceManager(this)
-        viewModel = ViewModel(
-            BaseModel(
-                cacheDataSource,
-                CacheResultHandler(
-                    cachedJoke,
-                    cacheDataSource,
-                    NoCachedJokes(resourceManager)
-                ),
-                CloudResultHandler(
-                    cachedJoke,
-                    BaseCloudDataSource(retrofit.create(JokeService::class.java)),
-                    NoConnection(resourceManager),
-                    ServiceUnavailable(resourceManager)
-                ),
-                cachedJoke
-            ),
-            BaseCommunication()
-        )
+        val cloudDataSource = BaseCloudDataSource(retrofit.create(JokeService::class.java))
+        val repository = BaseJokeRepository(cacheDataSource, cloudDataSource, BaseCachedJoke())
+        val interactor = BaseJokeInteractor(repository, JokeFailureFactory(resourceManager), JokeSuccessMapper())
+        viewModel = BaseViewModel(interactor, BaseCommunication())
     }
 }
