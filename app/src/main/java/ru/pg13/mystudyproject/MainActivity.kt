@@ -1,10 +1,11 @@
 package ru.pg13.mystudyproject
 
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ru.pg13.mystudyproject.databinding.ActivityMainBinding
 import ru.pg13.mystudyproject.domain.BaseViewModel
+import ru.pg13.mystudyproject.presentation.FavoriteDataView
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,23 +20,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         viewModel = (application as MyApplication).viewModel
 
-        binding.progressBar.visibility = View.INVISIBLE
-
-        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+        val jokeFavoriteDataView = findViewById<FavoriteDataView>(R.id.jokeFavoriteDataView)
+        jokeFavoriteDataView.listChanges { isChecked ->
             viewModel.chooseFavorites(isChecked)
         }
-
-        binding.changeButton.setOnClickListener {
+        jokeFavoriteDataView.handleChangeButton {
             viewModel.changeJokeStatus()
         }
-
-        binding.actionButton.setOnClickListener {
+        jokeFavoriteDataView.handleActionButton {
             viewModel.getJoke()
         }
 
         viewModel.observe(this) { state ->
-            state.show(binding.progressBar, binding.actionButton, binding.textView, binding.changeButton)
+            Log.d("test123", "state: $state")
+            jokeFavoriteDataView.show(state)
         }
+
+        val quoteFavoriteDataView = findViewById<FavoriteDataView>(R.id.quoteFavoriteDataView)
+        quoteFavoriteDataView.listChanges { isChecked ->
+            viewModel.chooseFavorites(isChecked)
+        }
+        quoteFavoriteDataView.handleChangeButton {
+            viewModel.changeJokeStatus()
+        }
+        quoteFavoriteDataView.handleActionButton {
+            viewModel.getJoke()
+        }
+
+//        viewModel.observe(this) { state ->
+//            Log.d("test123", "state: $state")
+//            quoteFavoriteDataView.show(state)
+//        }
     }
 }
 

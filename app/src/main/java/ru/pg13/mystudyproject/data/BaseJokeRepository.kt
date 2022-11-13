@@ -1,5 +1,6 @@
 package ru.pg13.mystudyproject.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.pg13.mystudyproject.data.interfaces.*
@@ -20,6 +21,7 @@ class BaseJokeRepository(
     override suspend fun getJoke(): JokeDataModel = withContext(Dispatchers.IO) {
         try {
             val joke = currentDataSource.getJoke()
+            Log.d("test123", "joke: $joke")
             cachedJoke.saveJoke(joke)
             return@withContext joke
         } catch (e: Exception) {

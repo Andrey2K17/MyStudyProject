@@ -14,8 +14,10 @@
     <string name="service_is_unavailable">Сервис временно недоступен</string>
     <string name="attention">Внимание</string>
     <string name="get_joke">Получить шутку</string>
+    <string name="get_quote">Получить цитату</string>
     <string name="no_connection">Отсутствует интернет соединение</string>
     <string name="show_favorite_joke">Показать любимые шутки</string>
     <string name="no_cached_jokes">Нет любимых шуток! Нажмите на сердц, чтобы добавить</string>
     <string name="generic_fail_message">Ошибка</string>
+    <string name="show_favorite_quote">Показать любимые цитаты</string>
 </resources>

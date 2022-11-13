@@ -9,7 +9,10 @@ interface JokeService {
 //    @GET("http://api.icndb.com/jokes/random/")
 //    suspend fun getJoke(): JokeServerModel
 
-    @GET("http://api.icndb.com/jokes/random/")
+/*    @GET("http://api.icndb.com/jokes/random/")
+    fun getJoke(): Call<JokeServerModel>*/
+
+    @GET("https://official-joke-api.appspot.com/random_joke")
     fun getJoke(): Call<JokeServerModel>
 }
 

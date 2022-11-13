@@ -17,7 +17,7 @@ class BaseJokeInteractor(
             Log.d("test123", "a: $a")
             return a
         } catch (e: Exception) {
-            Log.d("test123", "a: $e")
+            Log.d("test123", "b: $e")
             Joke.Failed(jokeFailureHandler.handle(e))
         }
     }
