@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ru.pg13.mystudyproject.views.CorrectTextView
+        <ru.pg13.mystudyproject.presentation.CorrectTextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:gravity="center"
             tools:text="Joke error message" />
 
-        <ru.pg13.mystudyproject.views.CorrectImageButton
+        <ru.pg13.mystudyproject.presentation.CorrectImageButton
             android:id="@+id/changeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,14 +33,14 @@
             tools:src="@drawable/baseline_favorite_border_24" />
     </LinearLayout>
 
-    <ru.pg13.mystudyproject.views.CorrectProgress
+    <ru.pg13.mystudyproject.presentation.CorrectProgress
         android:id="@+id/progressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true" />
 
-    <ru.pg13.mystudyproject.views.CorrectButton
+    <ru.pg13.mystudyproject.presentation.CorrectButton
         android:id="@+id/actionButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
