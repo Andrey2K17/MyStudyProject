@@ -1,5 +1,5 @@
 package ru.pg13.mystudyproject.core.data.net
 
-interface CommonDataModelMapper<T> {
-    fun map(id: Int, text: String, cached: Boolean): T
+interface CommonDataModelMapper<T, E> {
+    fun map(id: E, text: String, cached: Boolean): T
 }

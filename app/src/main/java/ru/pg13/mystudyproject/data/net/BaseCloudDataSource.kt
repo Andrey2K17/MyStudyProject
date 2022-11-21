@@ -8,9 +8,9 @@ import ru.pg13.mystudyproject.core.domain.ServiceUnavailableException
 import ru.pg13.mystudyproject.data.CommonDataModel
 import java.net.UnknownHostException
 
-abstract class BaseCloudDataSource<T : Mapper<CommonDataModel>> : CloudDataSource {
+abstract class BaseCloudDataSource<T : Mapper<CommonDataModel<E>>, E> : CloudDataSource<E> {
     protected abstract fun getServerModel() : Call<T>
-    override suspend fun getData(): CommonDataModel {
+    override suspend fun getData(): CommonDataModel<E> {
         return try {
             return getServerModel().execute().body()!!.to()
         } catch (e: Exception) {

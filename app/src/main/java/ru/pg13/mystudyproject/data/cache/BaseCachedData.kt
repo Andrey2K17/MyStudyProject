@@ -5,10 +5,10 @@ import ru.pg13.mystudyproject.core.data.net.ChangeCommonItem
 import ru.pg13.mystudyproject.core.data.net.ChangeStatus
 import ru.pg13.mystudyproject.data.CommonDataModel
 
-class BaseCachedData: CachedData {
-    private var cached: ChangeCommonItem = ChangeCommonItem.Empty()
+class BaseCachedData<E>: CachedData<E> {
+    private var cached: ChangeCommonItem<E> = ChangeCommonItem.Empty()
 
-    override fun save(data: CommonDataModel) {
+    override fun save(data: CommonDataModel<E>) {
         cached = data
     }
 
@@ -16,7 +16,7 @@ class BaseCachedData: CachedData {
         cached = ChangeCommonItem.Empty()
     }
 
-    override suspend fun change(changeStatus: ChangeStatus): CommonDataModel {
+    override suspend fun change(changeStatus: ChangeStatus<E>): CommonDataModel<E> {
         return cached.change(changeStatus)
     }
 }

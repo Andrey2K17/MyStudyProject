@@ -4,4 +4,4 @@ import ru.pg13.mystudyproject.core.data.net.ChangeStatus
 import ru.pg13.mystudyproject.core.data.net.DataFetcher
 
 
-interface CacheDataSource : DataFetcher, ChangeStatus
+interface CacheDataSource<E> : DataFetcher<E>, ChangeStatus<E>

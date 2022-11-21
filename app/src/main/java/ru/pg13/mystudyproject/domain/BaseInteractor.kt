@@ -6,10 +6,10 @@ import ru.pg13.mystudyproject.core.data.net.CommonRepository
 import ru.pg13.mystudyproject.core.domain.CommonInteractor
 import ru.pg13.mystudyproject.core.domain.FailureHandler
 
-class BaseInteractor(
-    private val repository: CommonRepository,
+class BaseInteractor<E>(
+    private val repository: CommonRepository<E>,
     private val jokeFailureHandler: FailureHandler,
-    private val mapper: CommonDataModelMapper<CommonItem.Success>
+    private val mapper: CommonDataModelMapper<CommonItem.Success, E>
 ) : CommonInteractor {
 
     override suspend fun getItem(): CommonItem {
