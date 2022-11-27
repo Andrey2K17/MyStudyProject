@@ -30,4 +30,6 @@ abstract class CommonUiModel(private val text: String) {
    open fun show(communication: Communication) = communication.showState(
         State.Initial(text(), getIconResId())
     )
+
+    fun show(showText: ShowText) = showText.show(text)
 }

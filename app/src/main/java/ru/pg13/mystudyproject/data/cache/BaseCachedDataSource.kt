@@ -2,6 +2,7 @@ package ru.pg13.mystudyproject.data.cache
 
 import io.realm.Realm
 import io.realm.RealmObject
+import io.realm.RealmResults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.pg13.mystudyproject.core.data.cache.CacheDataSource
@@ -15,24 +16,29 @@ import ru.pg13.mystudyproject.data.CommonDataModel
 abstract class BaseCachedDataSource<T : RealmObject, E>(
     private val realmProvider: RealmProvider,
     private val mapper: CommonDataModelMapper<T, E>,
-    private val commonDataMapper: RealmToCommonDataMapper<T, E>
+    private val realmToCommonDataMapper: RealmToCommonDataMapper<T, E>
 ) : CacheDataSource<E> {
 
     protected abstract val dbClass: Class<T>
 
     protected abstract fun findRealmObject(realm: Realm, id: E): T?
 
-    override suspend fun getData(): CommonDataModel<E> {
+    override suspend fun getData() = getRealmData {
+        realmToCommonDataMapper.map(it.random())
+    }
+    override suspend fun getDataList() = getRealmData { results ->
+        results.map { realmToCommonDataMapper.map(it) }
+    }
+
+    private fun <R> getRealmData(block: (list: RealmResults<T>) -> R) : R {
         realmProvider.provide().use {
             val list = it.where(dbClass).findAll()
             if (list.isEmpty())
                 throw NoCachedDataException()
             else
-                return commonDataMapper.map(list.random())
+                return block.invoke(list)
         }
     }
-
-
 
     override suspend fun addOrRemove(id: E, model: CommonDataModel<E>): CommonDataModel<E> =
         withContext(Dispatchers.IO) {

@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
 
-    <ru.pg13.mystudyproject.presentation.FavoriteDataView
-        android:id="@+id/jokeFavoriteDataView"
-        custom:checkboxText="@string/show_favorite_joke"
-        custom:actionButtonText="@string/get_joke"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <ru.pg13.mystudyproject.presentation.FavoriteDataView
-        android:id="@+id/quoteFavoriteDataView"
-        custom:checkboxText="@string/show_favorite_quote"
-        custom:actionButtonText="@string/get_quote"
+        android:id="@+id/jokeFavoriteDataView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:actionButtonText="@string/get_joke"
+        app:checkboxText="@string/show_favorite_joke" />
+
+    <!--    <ru.pg13.mystudyproject.presentation.FavoriteDataView
+            android:id="@+id/quoteFavoriteDataView"
+            custom:checkboxText="@string/show_favorite_quote"
+            custom:actionButtonText="@string/get_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />-->
 </LinearLayout>
