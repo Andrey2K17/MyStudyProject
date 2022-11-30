@@ -5,11 +5,15 @@ import androidx.lifecycle.Observer
 import ru.pg13.mystudyproject.presentation.CommonUiModel
 import ru.pg13.mystudyproject.presentation.State
 
-interface CommonViewModel {
+interface CommonViewModel<T> : CommonItemViewModel {
+    fun changeItemStatus(id: T) : Int
+    fun observe(owner: LifecycleOwner, observer: Observer<State>)
+    fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel<T>>>)
+}
+
+interface CommonItemViewModel {
     fun getItem()
     fun getItemList()
     fun changeItemStatus()
     fun chooseFavorites(favorites: Boolean)
-    fun observe(owner: LifecycleOwner, observer: Observer<State>)
-    fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel>>)
 }

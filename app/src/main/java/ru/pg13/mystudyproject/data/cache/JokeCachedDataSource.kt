@@ -7,8 +7,8 @@ import ru.pg13.mystudyproject.data.mapper.JokeRealmMapper
 class JokeCachedDataSource(
     realmProvider: RealmProvider,
     mapper: JokeRealmMapper,
-    commonMapper: JokeRealmToCommonMapper
-) : BaseCachedDataSource<JokeRealmModel, Int>(realmProvider, mapper, commonMapper) {
+    commonDataMapper: JokeRealmToCommonMapper
+) : BaseCachedDataSource<JokeRealmModel, Int>(realmProvider, mapper, commonDataMapper) {
     override val dbClass = JokeRealmModel::class.java
     override fun findRealmObject(realm: Realm, id: Int) =
         realm.where(dbClass).equalTo("id", id).findFirst()

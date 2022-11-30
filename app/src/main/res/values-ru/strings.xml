@@ -20,4 +20,6 @@
     <string name="no_cached_data">Нет любимых шуток! Нажмите на сердц, чтобы добавить</string>
     <string name="generic_fail_message">Ошибка</string>
     <string name="show_favorite_quote">Показать любимые цитаты</string>
+    <string name="remove_from_favorites">Удалить из любимых?</string>
+    <string name="yes">да</string>
 </resources>

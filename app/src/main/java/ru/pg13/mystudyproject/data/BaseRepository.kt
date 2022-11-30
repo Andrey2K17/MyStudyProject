@@ -36,4 +36,8 @@ class BaseRepository<E>(
     override suspend fun getCommonItemList(): List<CommonDataModel<E>> = withContext(Dispatchers.IO) {
         cacheDataSource.getDataList()
     }
+
+    override suspend fun removeItem(id: E) {
+        cacheDataSource.remove(id)
+    }
 }

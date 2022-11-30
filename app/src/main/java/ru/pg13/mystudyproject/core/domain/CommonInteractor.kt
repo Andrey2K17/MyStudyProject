@@ -2,12 +2,10 @@ package ru.pg13.mystudyproject.core.domain
 
 import ru.pg13.mystudyproject.domain.CommonItem
 
-interface CommonInteractor {
-
-    suspend fun getItem() : CommonItem
-    suspend fun getItemList() : List<CommonItem>
-
-    suspend fun changeFavorites() : CommonItem
-
-    fun getFavoriteJoke(favorites: Boolean)
+interface CommonInteractor<T> {
+    suspend fun getItem(): CommonItem<T>
+    suspend fun getItemList() : List<CommonItem<T>>
+    suspend fun changeFavorites(): CommonItem<T>
+    fun getFavorites(favorites: Boolean)
+    suspend fun removeItem(id: T)
 }

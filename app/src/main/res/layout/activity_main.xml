@@ -14,7 +14,7 @@
         android:layout_weight="1"/>
 
     <ru.pg13.mystudyproject.presentation.FavoriteDataView
-        android:id="@+id/jokeFavoriteDataView"
+        android:id="@+id/favoriteDataView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:actionButtonText="@string/get_joke"

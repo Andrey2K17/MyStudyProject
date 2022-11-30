@@ -19,4 +19,6 @@
     <string name="no_cached_data">No favorite jokes! Add one by heart icon</string>
     <string name="generic_fail_message">Fail</string>
     <string name="get_quote">Get quote</string>
+    <string name="remove_from_favorites">Remove from favorites?</string>
+    <string name="yes">yes</string>
 </resources>

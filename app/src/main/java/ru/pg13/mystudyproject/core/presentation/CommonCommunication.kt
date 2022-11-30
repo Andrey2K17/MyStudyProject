@@ -1,3 +1,3 @@
 package ru.pg13.mystudyproject.core.presentation
 
-interface CommonCommunication: Communication, ListCommunication
+interface CommonCommunication<T>: Communication, ListCommunication<T>

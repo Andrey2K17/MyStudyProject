@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.pg13.mystudyproject.presentation.CorrectTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/commonDataTextView"
     android:layout_width="match_parent"
-    android:maxLines="1"
-    android:ellipsize="end"
-    android:padding="@dimen/padding_medium"
-    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
     android:layout_height="wrap_content"
-    tools:text="some long text he j jlsad;fj;l  dfkksdfnnnn kjfdsjudfgjuu kkkfdsj" />
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/padding_medium"
+    >
+
+    <ru.pg13.mystudyproject.presentation.CorrectTextView
+        android:id="@+id/commonDataTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/padding_medium"
+        tools:text="Joke error message" />
+
+    <ru.pg13.mystudyproject.presentation.CorrectImageButton
+        android:id="@+id/changeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_gravity="center"
+        android:tint="@color/purple_200"
+        android:src="@drawable/baseline_favorite_24" />
+</LinearLayout>

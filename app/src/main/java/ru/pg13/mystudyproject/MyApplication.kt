@@ -21,8 +21,9 @@ import ru.pg13.mystudyproject.presentation.BaseViewModel
 
 class MyApplication : Application() {
 
-    lateinit var viewModel: BaseViewModel
-    lateinit var quoteViewModel: BaseViewModel
+    lateinit var viewModel: BaseViewModel<Int>
+    lateinit var jokeCommunication: BaseCommunication<Int>
+    lateinit var quoteViewModel: BaseViewModel<String>
 
     override fun onCreate() {
         super.onCreate()
@@ -39,8 +40,9 @@ class MyApplication : Application() {
         val repository = BaseRepository(cacheDataSource, cloudDataSource, BaseCachedData())
         val failureHandler = FailureFactory(resourceManager)
         val jokeMapper = CommonSuccessMapper<Int>()
+        jokeCommunication = BaseCommunication()
         val interactor = BaseInteractor(repository, failureHandler, jokeMapper)
-        viewModel = BaseViewModel(interactor, BaseCommunication())
+        viewModel = BaseViewModel(interactor, jokeCommunication)
 
         val quoteRepository = BaseRepository(
             QuoteCachedDataSource(realProvider, QuoteRealmMapper(), QuoteRealmToCommonMapper()),

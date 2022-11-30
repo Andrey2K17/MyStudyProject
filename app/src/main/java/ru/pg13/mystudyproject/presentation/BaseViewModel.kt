@@ -10,39 +10,52 @@ import kotlinx.coroutines.launch
 import ru.pg13.mystudyproject.core.domain.CommonInteractor
 import ru.pg13.mystudyproject.core.presentation.CommonCommunication
 import ru.pg13.mystudyproject.core.presentation.CommonViewModel
+import ru.pg13.mystudyproject.domain.CommonItem
 
-class BaseViewModel(
-    private val interactor: CommonInteractor,
-    private val communication: CommonCommunication,
-    private val dispathcer: CoroutineDispatcher = Dispatchers.Main
-) : ViewModel(), CommonViewModel {
+class BaseViewModel<T>(
+    private val interactor: CommonInteractor<T>,
+    private val communication: CommonCommunication<T>,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
+) : ViewModel(), CommonViewModel<T> {
 
     override fun getItem() {
-        viewModelScope.launch(dispathcer) {
+        viewModelScope.launch(dispatcher) {
             communication.showState(State.Progress)
             interactor.getItem().to().show(communication)
         }
     }
 
     override fun getItemList() {
-        viewModelScope.launch(dispathcer) {
+        viewModelScope.launch(dispatcher) {
             communication.showDataList(interactor.getItemList().toUiList())
         }
     }
 
     override fun changeItemStatus() {
-        viewModelScope.launch(dispathcer) {
-            if (communication.isState(State.INITIAL))
+        viewModelScope.launch(dispatcher) {
+            if (communication.isState(State.INITIAL)) {
                 interactor.changeFavorites().to().show(communication)
+                communication.showDataList(interactor.getItemList().toUiList())
+            }
         }
     }
 
-    override fun chooseFavorites(favorites: Boolean) = interactor.getFavoriteJoke(favorites)
+    override fun changeItemStatus(id: T): Int {
+        val position = communication.removeItem(id)
+        viewModelScope.launch(dispatcher) {
+            interactor.removeItem(id)
+        }
+        return position
+    }
 
+    override fun chooseFavorites(favorites: Boolean) = interactor.getFavorites(favorites)
     override fun observe(owner: LifecycleOwner, observer: Observer<State>) =
         communication.observe(owner, observer)
 
-    override fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel>>) {
-        communication.observeList(owner, observer)
-    }
+    override fun observeList(
+        owner: LifecycleOwner,
+        observer: Observer<List<CommonUiModel<T>>>
+    ) = communication.observeList(owner, observer)
 }
+
+fun <T> List<CommonItem<T>>.toUiList() = map { it.to() }
