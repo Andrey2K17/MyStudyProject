@@ -14,6 +14,10 @@ class FavoriteCommonUiModel<E>(private val id: E, text: String) : CommonUiModel<
         listener.change(id)
 
     override fun matches(id: E) = this.id == id
+
+    override fun same(model: CommonUiModel<E>): Boolean {
+        return model is FavoriteCommonUiModel<E> && model.id == id
+    }
 }
 
 class FailedCommonUiModel<E>(private val text: String) : CommonUiModel<E>(text) {
@@ -25,7 +29,7 @@ class FailedCommonUiModel<E>(private val text: String) : CommonUiModel<E>(text) 
 }
 
 abstract class CommonUiModel<T>(private val text: String) {
-
+    open fun same(model: CommonUiModel<T>) : Boolean = false
     protected open fun text() = text
 
     @DrawableRes

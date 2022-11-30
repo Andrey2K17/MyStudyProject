@@ -48,15 +48,8 @@ class CommonDataRecyclerAdapter<T>(
     }
 
     fun update() {
-        notifyDataSetChanged()
-    }
-
-    fun update(pair: Pair<Boolean, Int>) {
-        if (pair.first) {
-            notifyItemInserted(pair.second)
-        } else {
-            notifyItemRemoved(pair.second)
-        }
+        val result = communication.getDiffResult()
+        result.dispatchUpdatesTo(this)
     }
 
     abstract class CommonDataViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
