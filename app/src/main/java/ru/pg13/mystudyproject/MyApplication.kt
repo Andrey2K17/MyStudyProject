@@ -2,6 +2,8 @@ package ru.pg13.mystudyproject
 
 import android.app.Application
 import io.realm.Realm
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.pg13.mystudyproject.core.data.cache.PersistentDataSource
@@ -41,8 +43,13 @@ class MyApplication : Application() {
         super.onCreate()
         Realm.init(this)
 
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
         retrofit = Retrofit.Builder()
             .baseUrl("https://www.google.com")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
