@@ -1,5 +1,6 @@
 package ru.pg13.mystudyproject.presentation
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -12,11 +13,16 @@ import ru.pg13.mystudyproject.core.presentation.CommonCommunication
 import ru.pg13.mystudyproject.core.presentation.CommonViewModel
 import ru.pg13.mystudyproject.domain.CommonItem
 
-class BaseViewModel<T>(
+abstract class BaseViewModel<T>(
+    private val name: String,
     private val interactor: CommonInteractor<T>,
-    private val communication: CommonCommunication<T>,
+    val communication: CommonCommunication<T>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel(), CommonViewModel<T> {
+
+    init {
+        Log.d("BaseViewModelTag", "init $name")
+    }
 
     override fun getItem() {
         viewModelScope.launch(dispatcher) {
@@ -55,6 +61,22 @@ class BaseViewModel<T>(
         owner: LifecycleOwner,
         observer: Observer<List<CommonUiModel<T>>>
     ) = communication.observeList(owner, observer)
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("BaseViewModelTag", "onCleared $name")
+    }
 }
 
 fun <T> List<CommonItem<T>>.toUiList() = map { it.to() }
+
+
+class JokesViewModel(
+    interactor: CommonInteractor<Int>,
+    communication: CommonCommunication<Int>
+) : BaseViewModel<Int>("jokes", interactor, communication)
+
+class QuotesViewModel(
+    interactor: CommonInteractor<String>,
+    communication: CommonCommunication<String>
+) : BaseViewModel<String>("quotes", interactor, communication)

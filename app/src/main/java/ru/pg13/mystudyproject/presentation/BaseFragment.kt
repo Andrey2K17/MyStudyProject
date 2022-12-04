@@ -1,35 +1,55 @@
 package ru.pg13.mystudyproject.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.pg13.mystudyproject.MyApplication
 import ru.pg13.mystudyproject.R
 
-abstract class BaseFragment<T>: Fragment() {
+abstract class BaseFragment<V: BaseViewModel<T>, T> : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.data_fragment, container, false)
+    private lateinit var viewModel: BaseViewModel<T>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(
+            this,
+            (requireActivity().application as MyApplication).viewModelFactory
+        ).get(getViewModelClass())
+    }
+
+    protected abstract fun getViewModelClass(): Class<V>
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        Log.d("BaseFragmentTag", "onCreateView() ${javaClass.simpleName}")
+        return inflater.inflate(R.layout.data_fragment, container, false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("BaseFragmentTag", "onDestroyView() ${javaClass.simpleName}")
+    }
 
     @StringRes
-    protected abstract fun checkBoxText() : Int
-    @StringRes
-    protected abstract fun actionButtonText() : Int
+    protected abstract fun checkBoxText(): Int
 
-    protected abstract fun getViewModel(app: MyApplication): BaseViewModel<T>
-    protected abstract fun getCommunication(app: MyApplication): BaseCommunication<T>
+    @StringRes
+    protected abstract fun actionButtonText(): Int
+
+    fun tag(): String = javaClass.simpleName
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val application = requireActivity().application as MyApplication
-        val viewModel = getViewModel(application)
 
-        val communication = getCommunication(application)
         val favoriteDataView = view.findViewById<FavoriteDataView>(R.id.favoriteDataView)
         favoriteDataView.checkBoxText(checkBoxText())
         favoriteDataView.actionButtonText(actionButtonText())
@@ -50,11 +70,12 @@ abstract class BaseFragment<T>: Fragment() {
                     viewModel.changeItemStatus(id)
                 }.show()
             }
-        }, communication)
+        }, viewModel.communication)
         recyclerView.adapter = adapter
 
         viewModel.observeList(this) { adapter.update() }
         viewModel.getItemList()
     }
+
 
 }

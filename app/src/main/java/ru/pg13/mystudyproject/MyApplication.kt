@@ -4,6 +4,9 @@ import android.app.Application
 import io.realm.Realm
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.pg13.mystudyproject.core.data.cache.PersistentDataSource
+import ru.pg13.mystudyproject.core.data.cache.RealmProvider
+import ru.pg13.mystudyproject.core.domain.FailureHandler
 import ru.pg13.mystudyproject.data.BaseRepository
 import ru.pg13.mystudyproject.data.CommonSuccessMapper
 import ru.pg13.mystudyproject.data.cache.*
@@ -21,41 +24,30 @@ import ru.pg13.mystudyproject.presentation.BaseViewModel
 
 class MyApplication : Application() {
 
-    lateinit var jokeViewModel: BaseViewModel<Int>
-    lateinit var jokeCommunication: BaseCommunication<Int>
+    val viewModelFactory by lazy {
+        ViewModelsFactory(
+            MainModule(persistentDataStore),
+            JokesModule(failureHandler, realmProvider, retrofit),
+            QuotesModule(failureHandler, realmProvider, retrofit)
+        )
+    }
 
-    lateinit var quoteViewModel: BaseViewModel<String>
-    lateinit var quoteCommunication: BaseCommunication<String>
+    private lateinit var retrofit: Retrofit
+    private lateinit var realmProvider: RealmProvider
+    private lateinit var failureHandler: FailureHandler
+    private lateinit var persistentDataStore: PersistentDataSource
 
     override fun onCreate() {
         super.onCreate()
         Realm.init(this)
-        val retrofit = Retrofit.Builder()
+
+        retrofit = Retrofit.Builder()
             .baseUrl("https://www.google.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val realProvider = BaseRealmProvider()
-        val cacheDataSource = JokeCachedDataSource(realProvider, JokeRealmMapper(), JokeRealmToCommonMapper())
-        val resourceManager = BaseResourceManager(this)
-        val cloudDataSource = JokeCloudDataSource(retrofit.create(JokeService::class.java))
-        val repository = BaseRepository(cacheDataSource, cloudDataSource, BaseCachedData())
-        val failureHandler = FailureFactory(resourceManager)
-        val jokeMapper = CommonSuccessMapper<Int>()
-        jokeCommunication = BaseCommunication()
-        val interactor = BaseInteractor(repository, failureHandler, jokeMapper)
-        jokeViewModel = BaseViewModel(interactor, jokeCommunication)
-
-        val quoteRepository = BaseRepository(
-            QuoteCachedDataSource(realProvider, QuoteRealmMapper(), QuoteRealmToCommonMapper()),
-            QuoteCloudDataSource(retrofit.create(QuoteService::class.java)),
-            BaseCachedData()
-        )
-        val quoteMapper = CommonSuccessMapper<String>()
-        quoteCommunication = BaseCommunication()
-        quoteViewModel = BaseViewModel(
-            BaseInteractor(quoteRepository, failureHandler, quoteMapper),
-            quoteCommunication
-        )
+        realmProvider = BaseRealmProvider()
+        failureHandler = FailureFactory(BaseResourceManager(this))
+        persistentDataStore = PersistentDataSource.Base(this)
     }
 }
